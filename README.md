@@ -1,29 +1,25 @@
 # openlayer加载示例
 
-## Project Setup
+## 启动项目
 
 ```sh
-# 启动项目
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 本地预览
 
 ```sh
-# 本地预览
 npm run dev
 ```
 
-### Compile and Minify for Production
+### 打包
 
 ```sh
-# 打包
 npm run build
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-# 代码风格
 npm run lint
 ```
