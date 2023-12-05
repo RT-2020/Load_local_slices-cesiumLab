@@ -7,7 +7,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
+      redirect: '/openlayer',
+      children:[
+        {
+          path: '/openlayer',
+          name: 'openlayer示例',
+          component: () => import('../components/openlayerTest.vue')
+        },
+        {
+          path: '/cesium',
+          name: 'cesium示例',
+          component: () => import('../components/cesiumTest.vue')
+        },
+      ]
     },
   ]
 })

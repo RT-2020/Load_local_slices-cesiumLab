@@ -33,7 +33,7 @@ function initMap() {
   }
 
   // const mapServerBasePath = 'http://localhost:8888/EarthG11/%E5%9B%BE%E5%B1%82/_alllayers'
-  const mapServerBasePath = 'http://10.52.1.38:6088/geoscene/static/servers/earthGll/_alllayers/'
+  const mapServerBasePath = 'geoscene/static/servers/earthGll/_alllayers'
 
   new Map({
     target: 'map-dom',
