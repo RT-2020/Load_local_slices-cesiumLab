@@ -17,9 +17,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/geoscene': {
+      '/mapTile': {
         target: 'http://10.52.1.38:6088',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/mapTile/, ''),
       },
     },
   },

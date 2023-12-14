@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import modules from './model/index.js';
+
+/**
+ * 构造路由模块
+ */
+const routes = [
+  ...modules.opnelayer,
+  ...modules.cesium
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,19 +17,8 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      redirect: '/openlayer',
-      children:[
-        {
-          path: '/openlayer',
-          name: 'openlayer示例',
-          component: () => import('../components/openlayerTest.vue')
-        },
-        {
-          path: '/cesium',
-          name: 'cesium示例',
-          component: () => import('../components/cesiumTest.vue')
-        },
-      ]
+      redirect: routes ? routes[0].path : '/',
+      children: routes
     },
   ]
 })

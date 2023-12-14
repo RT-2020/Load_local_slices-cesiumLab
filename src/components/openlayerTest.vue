@@ -11,9 +11,13 @@ import Map from 'ol/Map'
 import proj4 from 'proj4'
 import { register } from 'ol/proj/proj4.js'
 import XYZ from 'ol/source/XYZ.js'
+import { transformExtent } from 'ol/proj';
 import WMTSTileGrid from 'ol/tilegrid/WMTS.js'
 
-import { onMounted } from 'vue'
+import { onMounted,getCurrentInstance } from 'vue'
+
+const { proxy } = getCurrentInstance()
+
 
 function initMap() {
   // 定义坐标系, 这里定义之后后续代码中的坐标系代码 4490 才会有效
@@ -21,8 +25,8 @@ function initMap() {
   register(proj4)
 
   // 计算各个缩放级别的分辨率
-  const maxZoom = 9 // 从服务说明中获取
-  const minResolution = 0.7039130078552128 // 从服务说明中获取
+  const maxZoom = 22 // 从服务说明中获取
+  const minResolution = 0.70391300785521282 // 从服务说明中获取
   // 计算
   const resolutions = []
   const matrixIds = []
@@ -32,15 +36,21 @@ function initMap() {
     matrixIds[z] = z
   }
 
-  // const mapServerBasePath = 'http://localhost:8888/EarthG11/%E5%9B%BE%E5%B1%82/_alllayers'
-  const mapServerBasePath = 'geoscene/static/servers/earthGll/_alllayers'
+  var extent = transformExtent(
+    [107.34350754384501, 28.136996855272013, 107.356257619901, 28.163110084644],
+    'EPSG:4326', // 原始坐标系是WGS 84
+    'EPSG:4490' 
+);
+  // http://10.52.1.38:6088/dom/608B0591/_alllayers/
+  const mapServerBasePath = '/dom/608B0591/_alllayers/'
+  
 
-  new Map({
+  const map = new Map({
     target: 'map-dom',
     layers: [
       new TileLayer({
         source: new XYZ({
-          url: mapServerBasePath + '/{z}/{y}/{x}',
+          url: proxy.$mapBaseUrl + mapServerBasePath + '{z}/{y}/{x}',
           tileGrid: new WMTSTileGrid({
             origin: [-180, 90], // 从服务说明中获取
             resolutions: resolutions,
@@ -49,13 +59,12 @@ function initMap() {
           wrapX: true,
           projection: 'EPSG:4490',
           // 重构地图请求地址
+          // eslint-disable-next-line no-unused-vars
           tileLoadFunction: (imageTile, src) => {
             const Z = 'L' + formatNumberLength(imageTile.tileCoord[0], 10, 2)
             const X = 'C' + formatNumberLength(imageTile.tileCoord[1], 16, 8)
             const Y = 'R' + formatNumberLength(imageTile.tileCoord[2], 16, 8)
-            console.log('xxxxx', Z, X, Y)
-            console.log('imageTile', imageTile, src)
-            imageTile.getImage().src = mapServerBasePath + '/' + Z + '/' + Y + '/' + X + '.jpg'
+            imageTile.getImage().src = proxy.$mapBaseUrl + mapServerBasePath + '/' + Z + '/' + Y + '/' + X + '.png'
           }
         })
       })
@@ -66,6 +75,12 @@ function initMap() {
       zoom: 7
     })
   })
+
+  map.getView().fit(extent, {
+    size: map.getSize(), // 地图容器的大小
+    padding: [100, 100, 100, 100], // 可选，如果您想在范围周围有一些边缘空间
+    duration: 1000 // 可选，动画持续时间（毫秒）
+});
 }
 
 onMounted(() => {

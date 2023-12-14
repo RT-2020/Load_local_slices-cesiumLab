@@ -7,8 +7,10 @@
 <template>
   <div class="map-demo">
     <div class="map-demo-buttons">
-      <button @click="$router.push('/openlayer')">OpenLayers 示例</button>
-      <button @click="$router.push('/cesium')">Cesium 示例</button>
+      <button @click="$router.push('/openlayer')">OpenLayers本地切片 示例</button>
+      <button @click="$router.push('/openlayerXYZ')">OpenLayersXYZ 示例</button>
+      <button @click="$router.push('/cesium')">Cesium本地切片 示例</button>
+      <button @click="$router.push('/cesiumXYZ')">CesiumXYZ 示例</button>
     </div>
 
     <RouterView />

@@ -8,6 +8,8 @@ import router from './router'
 
 const app = createApp(App)
 
+app.config.globalProperties.$mapBaseUrl = '/mapTile'
+
 app.use(createPinia())
 app.use(router)
 
