@@ -1,4 +1,4 @@
-# openlayer加载本地切片数据示例
+# openlayer+cesium加载本地切片数据示例
 
 ## 启动项目
 
